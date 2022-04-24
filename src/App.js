@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import Overview from "./components/Overview";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      task: "",
+      tasks: [],
+    };
+    this.handleInputchange = this.handleInputChange.bind(this);
+    this.handleInputSubmit = this.handleInputSubmit.bind(this);
+  }
+
+  handleInputChange(e) {
+    this.setState({ task: e.target.value });
+  }
+
+  handleInputSubmit(e) {
+    e.preventDefault();
+    this.setState({ task: "", tasks: [...this.state.tasks, this.state.task] });
+  }
+
+  render() {
+    const { task, tasks } = this.state;
+    return (
+      <div>
+        <form onSubmit={(e) => this.handleInputSubmit(e)}>
+          <label htmlFor="taskInput">Enter task</label>
+          <input
+            type="text"
+            id="taskInput"
+            value={task}
+            onChange={(e) => this.handleInputChange(e)}
+            onSubmit={this.handleInputSubmit}
+          />
+          <button type="submit">Add</button>
+          <Overview tasks={tasks} />
+        </form>
+      </div>
+    );
+  }
 }
 
 export default App;
