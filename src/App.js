@@ -1,12 +1,16 @@
 import { Component } from "react";
 import Overview from "./components/Overview";
+import uniqid from "uniqid";
 
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      task: "",
+      task: {
+        name: "",
+        id: uniqid(),
+      },
       tasks: [],
     };
     this.handleInputchange = this.handleInputChange.bind(this);
@@ -14,12 +18,15 @@ class App extends Component {
   }
 
   handleInputChange(e) {
-    this.setState({ task: e.target.value });
+    this.setState({ task: { name: e.target.value, id: this.state.task.id } });
   }
 
   handleInputSubmit(e) {
     e.preventDefault();
-    this.setState({ task: "", tasks: [...this.state.tasks, this.state.task] });
+    this.setState({
+      tasks: [...this.state.tasks, this.state.task],
+      task: { name: "", id: uniqid() },
+    });
   }
 
   render() {
@@ -31,7 +38,7 @@ class App extends Component {
           <input
             type="text"
             id="taskInput"
-            value={task}
+            value={task.name}
             onChange={(e) => this.handleInputChange(e)}
             onSubmit={this.handleInputSubmit}
           />
